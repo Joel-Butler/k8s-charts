@@ -1,0 +1,14 @@
+apiVersion: v1
+entries:
+  mariadb:
+  - apiVersion: v2
+    appVersion: 10.5.0
+    created: "2020-03-30T20:47:06.0868841-04:00"
+    description: A custom Helm Chart for Arm64 Deployment of MariaDB
+    digest: 769ece1526545216945edcfbe5b9fdc2b0adc739df8c663b2a98f93e9c59fa89
+    name: mariadb
+    type: application
+    urls:
+    - https://joel-butler.github.io/k8s-charts/mariadb-0.1.0.tgz
+    version: 0.1.0
+generated: "2020-03-30T20:47:06.0788848-04:00"
