@@ -6,6 +6,7 @@ metadata:
     {{- include "mariadb.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.replicaCount }}
+  serviceName: {{ include "mariadb.fullname" . }}
   selector:
     matchLabels:
       {{- include "mariadb.selectorLabels" . | nindent 6 }}
@@ -48,6 +49,9 @@ spec:
             - name: mysql
               containerPort: 3306
               protocol: TCP
+          volumeMounts:
+          - name: data
+            mountPath: /var/lib/mysql
           livenessProbe:
             exec:
               command:
@@ -94,3 +98,12 @@ spec:
       tolerations:
         {{- toYaml . | nindent 8 }}
     {{- end }}
+  volumeClaimTemplates:
+  - metadata:
+      name: data
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      {{if .Values.db.storageClass}}storageClassName: {{ .Values.db.storageClass}}{{ end }}
+      resources:
+        requests:
+          storage: {{ .Values.db.storageSize | quote }}

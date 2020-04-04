@@ -49,10 +49,13 @@ resources: {}
   #   memory: 128Mi
 
 db:
-  user: "sqlUser"
-  name: "sqlDB"
+  user: sqlUser
+  name: sqlDB
+  storageSize: 20Gi
+  storageClass: nfs-storage-dbdata
+  
 rootUser:
-  password: ""
+  password: 
 
 ingress: 
   enabled: false
@@ -60,8 +63,9 @@ ingress:
 livenessProbe:
   enabled: true
   ##
-  ## Initializing the database could take some time
-  initialDelaySeconds: 120
+  ## Initializing the database could take some time - allow additional time for ARM setup as I suspect 
+  ## this may be causing the failure
+  initialDelaySeconds: 300
   ##
   ## Default Kubernetes values
   periodSeconds: 10

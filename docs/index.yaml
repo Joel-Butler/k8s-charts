@@ -3,22 +3,32 @@ entries:
   mariadb:
   - apiVersion: v2
     appVersion: 10.4.12
-    created: "2020-03-30T21:56:56.8107858-04:00"
+    created: "2020-04-04T14:58:02.7991796-04:00"
+    description: A custom Helm Chart for Arm64 Deployment of MariaDB
+    digest: 6f2dbf53a3741ce9c1c4a3f94cf122327e0b96237c04fb5b23743ffd9bfafd9f
+    name: mariadb
+    type: application
+    urls:
+    - mariadb-0.3.0.tgz
+    version: 0.3.0
+  - apiVersion: v2
+    appVersion: 10.4.12
+    created: "2020-04-04T14:58:02.7971795-04:00"
     description: A custom Helm Chart for Arm64 Deployment of MariaDB
     digest: 9c3a2321b53edd407ee5aa4924b595602ee400c0357654b060e15acfd20798d1
     name: mariadb
     type: application
     urls:
-    - https://joel-butler.github.io/k8s-charts/mariadb-0.2.0.tgz
+    - mariadb-0.2.0.tgz
     version: 0.2.0
   - apiVersion: v2
     appVersion: 10.4.12
-    created: "2020-03-30T21:56:56.8097872-04:00"
+    created: "2020-04-04T14:58:02.7951806-04:00"
     description: A custom Helm Chart for Arm64 Deployment of MariaDB
     digest: 01ac7a28b3fe99cbf03553d4ce1523c3ed543ec7164b562d3a5b60944d3e3b85
     name: mariadb
     type: application
     urls:
-    - https://joel-butler.github.io/k8s-charts/mariadb-0.1.0.tgz
+    - mariadb-0.1.0.tgz
     version: 0.1.0
-generated: "2020-03-30T21:56:56.8027858-04:00"
+generated: "2020-04-04T14:58:02.7931819-04:00"
