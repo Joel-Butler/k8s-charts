@@ -1,0 +1,206 @@
+Release "wikijs" does not exist. Installing it now.
+NAME: wikijs
+LAST DEPLOYED: Sat Apr  4 17:49:41 2020
+NAMESPACE: wikijs
+STATUS: pending-install
+REVISION: 1
+HOOKS:
+---
+# Source: wikijs/templates/tests/test-connection.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "wikijs-test-connection"
+  labels:
+    helm.sh/chart: wikijs-0.1.0
+    app.kubernetes.io/name: wikijs
+    app.kubernetes.io/instance: wikijs
+    app.kubernetes.io/version: "2.2-arm"
+    app.kubernetes.io/managed-by: Helm
+  annotations:
+    "helm.sh/hook": test-success
+spec:
+  containers:
+    - name: wget
+      image: busybox
+      command: ['wget']
+      args: ['wikijs:3000']
+  restartPolicy: Never
+MANIFEST:
+---
+# Source: wikijs/templates/serviceaccount.yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: wikijs
+  labels:
+    helm.sh/chart: wikijs-0.1.0
+    app.kubernetes.io/name: wikijs
+    app.kubernetes.io/instance: wikijs
+    app.kubernetes.io/version: "2.2-arm"
+    app.kubernetes.io/managed-by: Helm
+---
+# Source: wikijs/templates/secrets.yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: wikijs
+  labels:
+    app: "wikijs"
+    chart: "wikijs-0.1.0"
+    release: "wikijs"
+    heritage: "Helm"
+type: Opaque
+data:
+  db-user: "d2lraWpz"
+  db-password: "WFNHYVZscTZmbUk3NTRVamNWNHo="
+---
+# Source: wikijs/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: wikijs
+  labels:
+    helm.sh/chart: wikijs-0.1.0
+    app.kubernetes.io/name: wikijs
+    app.kubernetes.io/instance: wikijs
+    app.kubernetes.io/version: "2.2-arm"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  type: ClusterIP
+  ports:
+    - port: 3000
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    app.kubernetes.io/name: wikijs
+    app.kubernetes.io/instance: wikijs
+---
+# Source: wikijs/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wikijs
+  labels:
+    helm.sh/chart: wikijs-0.1.0
+    app.kubernetes.io/name: wikijs
+    app.kubernetes.io/instance: wikijs
+    app.kubernetes.io/version: "2.2-arm"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: wikijs
+      app.kubernetes.io/instance: wikijs
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: wikijs
+        app.kubernetes.io/instance: wikijs
+    spec:
+      serviceAccountName: wikijs
+      securityContext:
+        {}
+      containers:
+        - name: wikijs
+          securityContext:
+            {}
+          image: "requarks/wiki:2.2-arm"
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 3000
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+          resources:
+            limits:
+              cpu: "1"
+              memory: 512Mi
+            requests:
+              cpu: 200m
+              memory: 128Mi
+          env:
+            - name: "DB_TYPE"
+              value: mysql
+            - name: DB_PORT
+              value: "3306"
+            - name: "DB_HOST"
+              value: mariadb.data-db
+            - name: "DB_USER"
+              valueFrom:
+                secretKeyRef:
+                  name: wikijs
+                  key: db-user
+            - name: "DB_PASS"
+              valueFrom:
+                secretKeyRef:
+                  name: wikijs
+                  key: db-password
+            - name: "DB_NAME"
+              value: wikijs
+---
+# Source: wikijs/templates/ingress.yaml
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: wikijs
+  labels:
+    helm.sh/chart: wikijs-0.1.0
+    app.kubernetes.io/name: wikijs
+    app.kubernetes.io/instance: wikijs
+    app.kubernetes.io/version: "2.2-arm"
+    app.kubernetes.io/managed-by: Helm
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    
+    
+    cert-manager.io/issuer: letsencrypt-staging
+    
+  
+spec:
+  tls:
+    - hosts:
+        - "wiki.jhbutler.info"
+      secretName: wikitls
+  rules:
+    - host: "wiki.jhbutler.info"
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: wikijs
+              servicePort: 3000
+---
+# Source: wikijs/templates/certmanagerIssuer.yaml
+apiVersion: cert-manager.io/v1alpha2
+kind: Issuer
+metadata:
+  name: letsencrypt-staging
+spec:
+  acme:
+    # The ACME server URL
+    server: https://acme-staging-v02.api.letsencrypt.org/directory
+    # Email address used for ACME registration
+    email: joel@jhbutler.info
+    # Name of a secret used to store the ACME account private key
+    privateKeySecretRef:
+      name: letsencrypt-staging
+    # Enable the HTTP-01 challenge provider
+    solvers:
+    - http01:
+        ingress:
+          class:  nginx
+
+NOTES:
+1. Get the application URL by running these commands:
+  https://wiki.jhbutler.info/
