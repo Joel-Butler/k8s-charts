@@ -3,7 +3,7 @@ entries:
   mariadb:
   - apiVersion: v2
     appVersion: 10.4.12
-    created: "2020-04-04T14:58:02.7991796-04:00"
+    created: "2020-04-04T18:47:22.5946207-04:00"
     description: A custom Helm Chart for Arm64 Deployment of MariaDB
     digest: 6f2dbf53a3741ce9c1c4a3f94cf122327e0b96237c04fb5b23743ffd9bfafd9f
     name: mariadb
@@ -13,7 +13,7 @@ entries:
     version: 0.3.0
   - apiVersion: v2
     appVersion: 10.4.12
-    created: "2020-04-04T14:58:02.7971795-04:00"
+    created: "2020-04-04T18:47:22.5916177-04:00"
     description: A custom Helm Chart for Arm64 Deployment of MariaDB
     digest: 9c3a2321b53edd407ee5aa4924b595602ee400c0357654b060e15acfd20798d1
     name: mariadb
@@ -23,7 +23,7 @@ entries:
     version: 0.2.0
   - apiVersion: v2
     appVersion: 10.4.12
-    created: "2020-04-04T14:58:02.7951806-04:00"
+    created: "2020-04-04T18:47:22.5886233-04:00"
     description: A custom Helm Chart for Arm64 Deployment of MariaDB
     digest: 01ac7a28b3fe99cbf03553d4ce1523c3ed543ec7164b562d3a5b60944d3e3b85
     name: mariadb
@@ -31,4 +31,15 @@ entries:
     urls:
     - mariadb-0.1.0.tgz
     version: 0.1.0
-generated: "2020-04-04T14:58:02.7931819-04:00"
+  wikijs:
+  - apiVersion: v2
+    appVersion: 2.2-arm
+    created: "2020-04-04T18:47:22.5966215-04:00"
+    description: A Helm chart for Kubernetes
+    digest: af06f4d35e079b9b33c932fe5c719be936bf600c53b8c0bddea8eb2ecd1a907e
+    name: wikijs
+    type: application
+    urls:
+    - wikijs-0.1.0.tgz
+    version: 0.1.0
+generated: "2020-04-04T18:47:22.5826281-04:00"
