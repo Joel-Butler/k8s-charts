@@ -54,7 +54,8 @@ ingress:
     nginx.ingress.kubernetes.io/rewrite-target: /
     kubernetes.io/ingress.class: nginx
     #cert-manager.io/cluster-issuer: #letsencrypt-staging # letsencyrpt-staging or letsencrypt-prod - requires installed and configured instance of cert-manager.
-  
+  #certmanager: 
+  #  issuer: 
   hosts:
   - host: some.domain
     paths: 
