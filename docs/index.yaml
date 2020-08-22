@@ -3,7 +3,7 @@ entries:
   gitea:
   - apiVersion: v2
     appVersion: latest
-    created: "2020-08-22T08:36:08.0739073-04:00"
+    created: "2020-08-22T08:38:33.7050521-04:00"
     description: A Helm chart for Kubernetes
     digest: 26ecc838d3751066b9ea1714f33af0701f127ade56db9c6a239cbabdadf764eb
     name: gitea
@@ -13,7 +13,7 @@ entries:
     version: 0.2.0
   - apiVersion: v2
     appVersion: 1.11.4
-    created: "2020-08-22T08:36:08.0719083-04:00"
+    created: "2020-08-22T08:38:33.703052-04:00"
     description: A Helm chart for Kubernetes
     digest: 25d212ba880b2ab3d41c40996b911f26f634621e4fc60d7f70dae1c3e93db0d4
     name: gitea
@@ -24,7 +24,7 @@ entries:
   mariadb:
   - apiVersion: v2
     appVersion: 10.4.12
-    created: "2020-08-22T08:36:08.0779122-04:00"
+    created: "2020-08-22T08:38:33.7090512-04:00"
     description: A custom Helm Chart for Arm64 Deployment of MariaDB
     digest: 6f2dbf53a3741ce9c1c4a3f94cf122327e0b96237c04fb5b23743ffd9bfafd9f
     name: mariadb
@@ -34,7 +34,7 @@ entries:
     version: 0.3.0
   - apiVersion: v2
     appVersion: 10.4.12
-    created: "2020-08-22T08:36:08.0759087-04:00"
+    created: "2020-08-22T08:38:33.7070536-04:00"
     description: A custom Helm Chart for Arm64 Deployment of MariaDB
     digest: 9c3a2321b53edd407ee5aa4924b595602ee400c0357654b060e15acfd20798d1
     name: mariadb
@@ -44,7 +44,7 @@ entries:
     version: 0.2.0
   - apiVersion: v2
     appVersion: 10.4.12
-    created: "2020-08-22T08:36:08.0749107-04:00"
+    created: "2020-08-22T08:38:33.7060517-04:00"
     description: A custom Helm Chart for Arm64 Deployment of MariaDB
     digest: 01ac7a28b3fe99cbf03553d4ce1523c3ed543ec7164b562d3a5b60944d3e3b85
     name: mariadb
@@ -55,7 +55,17 @@ entries:
   mesh-test:
   - apiVersion: v2
     appVersion: 0.5.2
-    created: "2020-08-22T08:36:08.0888687-04:00"
+    created: "2020-08-22T08:38:33.7200539-04:00"
+    description: Initial deployment of the mesh-test application for testing OSM.
+    digest: 1689679f7c14917ea4a6ec26d74a20c38107b0e61c5326c613269352db7a6d97
+    name: mesh-test
+    type: application
+    urls:
+    - mesh-test-0.1.5.tgz
+    version: 0.1.5
+  - apiVersion: v2
+    appVersion: 0.5.2
+    created: "2020-08-22T08:38:33.7180519-04:00"
     description: Initial deployment of the mesh-test application for testing OSM.
     digest: 5d2f0e35925d2125321ad5113f9a71158ca84845e067bfc508253112a9ebf94f
     name: mesh-test
@@ -65,7 +75,7 @@ entries:
     version: 0.1.4
   - apiVersion: v2
     appVersion: 0.5.2
-    created: "2020-08-22T08:36:08.0858707-04:00"
+    created: "2020-08-22T08:38:33.7170528-04:00"
     description: Initial deployment of the mesh-test application for testing OSM.
     digest: 0d08a07964cc136c1af23ce6ab3288d16f46b5b1ed508840a4b895c8fbcca283
     name: mesh-test
@@ -75,7 +85,7 @@ entries:
     version: 0.1.3
   - apiVersion: v2
     appVersion: 0.5.1
-    created: "2020-08-22T08:36:08.0819148-04:00"
+    created: "2020-08-22T08:38:33.7160514-04:00"
     description: Initial deployment of the mesh-test application for testing OSM.
     digest: 8f48a761b8719c21a61e8bf49d9b5249e8e1eff51c7826967f53cb0972df2f30
     name: mesh-test
@@ -85,7 +95,7 @@ entries:
     version: 0.1.2
   - apiVersion: v2
     appVersion: 0.5.1
-    created: "2020-08-22T08:36:08.0809112-04:00"
+    created: "2020-08-22T08:38:33.7140527-04:00"
     description: Initial deployment of the mesh-test application for testing OSM.
     digest: 340d56a08c0fef071b9642127382dff7c27a4475db94e7ba9553c6783658a0b5
     name: mesh-test
@@ -95,7 +105,7 @@ entries:
     version: 0.1.1
   - apiVersion: v2
     appVersion: 0.5.1
-    created: "2020-08-22T08:36:08.078915-04:00"
+    created: "2020-08-22T08:38:33.7130522-04:00"
     description: Initial deployment of the mesh-test application for testing OSM.
     digest: 424cffb446df2c2228d1ac350dab95a6bc9a8e3c818a1fb5e013950fe4f06b75
     name: mesh-test
@@ -106,7 +116,7 @@ entries:
   wikijs:
   - apiVersion: v2.4
     appVersion: "2.4"
-    created: "2020-08-22T08:36:08.0948817-04:00"
+    created: "2020-08-22T08:38:33.7260519-04:00"
     description: A Helm chart for Kubernetes
     digest: bd8bf942460b108203feeb23ee722da55b098c19ce55585b0a7e3fa033e263e6
     name: wikijs
@@ -116,7 +126,7 @@ entries:
     version: 0.2.2
   - apiVersion: v2.4
     appVersion: "2.4"
-    created: "2020-08-22T08:36:08.0928707-04:00"
+    created: "2020-08-22T08:38:33.7240641-04:00"
     description: A Helm chart for Kubernetes
     digest: debb1c79d5400e7a56b43e6b570f444292702fccce84be49f8ab0855b0892edd
     name: wikijs
@@ -126,7 +136,7 @@ entries:
     version: 0.2.1
   - apiVersion: v2
     appVersion: 2.3-arm
-    created: "2020-08-22T08:36:08.0908696-04:00"
+    created: "2020-08-22T08:38:33.7230512-04:00"
     description: A Helm chart for Kubernetes
     digest: 30209f74bc90eaf212245fb99c8b0451f95c509dcaf522651390ee1b364e39e6
     name: wikijs
@@ -136,7 +146,7 @@ entries:
     version: 0.2.0
   - apiVersion: v2
     appVersion: 2.2-arm
-    created: "2020-08-22T08:36:08.0898711-04:00"
+    created: "2020-08-22T08:38:33.7210532-04:00"
     description: A Helm chart for Kubernetes
     digest: af06f4d35e079b9b33c932fe5c719be936bf600c53b8c0bddea8eb2ecd1a907e
     name: wikijs
@@ -144,4 +154,4 @@ entries:
     urls:
     - wikijs-0.1.0.tgz
     version: 0.1.0
-generated: "2020-08-22T08:36:08.0699089-04:00"
+generated: "2020-08-22T08:38:33.7010534-04:00"
