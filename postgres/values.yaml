@@ -1,0 +1,88 @@
+# Default values for postgres.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+image:
+  repository: postgres
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: ""
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+podAnnotations: {}
+
+podSecurityContext: {}
+  # fsGroup: 2000
+
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+service:
+  type: ClusterIP
+  port: 5432
+
+db:
+  user: pgsqlUser
+  name: pgMainDB
+  storageSize: 20Gi
+  storageClass: nfs-storage-dbdata
+
+ingress:
+  enabled: false
+
+livenessProbe:
+  enabled: true
+  ##
+  ## Initializing the database could take some time - allow additional time for ARM setup as I suspect 
+  ## this may be causing the failure
+  initialDelaySeconds: 300
+  ##
+  ## Default Kubernetes values
+  periodSeconds: 20
+  timeoutSeconds: 4
+  successThreshold: 1
+  failureThreshold: 3
+
+readinessProbe:
+  enabled: true
+  initialDelaySeconds: 30
+  ##
+  ## Default Kubernetes values
+  periodSeconds: 10
+  timeoutSeconds: 4
+  successThreshold: 1
+  failureThreshold: 3
+
+  resources: {}
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+  # targetMemoryUtilizationPercentage: 80
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
