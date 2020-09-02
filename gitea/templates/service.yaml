@@ -5,11 +5,11 @@ metadata:
   labels:
     {{- include "gitea.labels" . | nindent 4 }}
 spec:
-  type: {{ .Values.service.type }}
+  type: {{ .Values.service.type }} #should be LoadBalancer... or have that option visible.
   ports:
     - port: {{ .Values.service.port }}
-      targetPort: http
+      targetPort: http #todo: Fix this - we're not doing http
       protocol: TCP
-      name: http
+      name: http #also here
   selector:
     {{- include "gitea.selectorLabels" . | nindent 4 }}
