@@ -1,11 +1,11 @@
-# Default values for jira-software.
+# Default values for confluence-software.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
 replicaCount: 1
 
 image:
-  repository: joelanz/jira-software-arm64
+  repository: joelanz/confluence-server-arm64
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
   tag: ""
@@ -25,7 +25,10 @@ serviceAccount:
 
 podAnnotations: {}
 
-podSecurityContext: {}
+podSecurityContext: 
+  runAsUser: 2002
+  runAsGroup: 2002
+  fsGroup: 2002
   # fsGroup: 2000
 
 securityContext: {}
@@ -38,13 +41,13 @@ securityContext: {}
 
 service:
   type: ClusterIP
-  port: 8080
+  port: 8090
 
 db:
-  url: jdbc:postgresql://192.168.88.12:5432/jiradb
-  user: jirauser
+  url: jdbc:postgresql://192.168.88.12:5432/confluencedb
+  user: confluenceuser
   driver: org.postgresql.Driver
-  type: postgres72
+  type: postgresql
   #schema :
   #password - should be passed as secret from console or secret store.
 
@@ -64,16 +67,16 @@ ingress:
     email: joel@jhbutler.info
     issuer: cluster-letsencrypt-prod
   hosts:
-  - host: jira.jhbutler.info
+  - host: confluence.jhbutler.info
     paths: 
     - /
   tls:
     - hosts:
-      - jira.jhbutler.info 
-      secretName: jiracert 
-  tomcat-host: jira.jhbutler.info # single record required for tomcat reverse proxy config.
-  tomcat-proxy-port: "443"
-  tomcat-scheme: "https"
+      - confluence.jhbutler.info 
+      secretName: confluenceCert 
+  tomcatHost: confluence.jhbutler.info # single record required for tomcat reverse proxy config.
+  tomcatProxyPort: "443"
+  tomcatScheme: "https"
 
 livenessProbe:
   enabled: false

@@ -1,25 +1,25 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: {{ include "jira-software.fullname" . }}
+  name: {{ include "confluence-software.fullname" . }}
   labels:
-    {{- include "jira-software.labels" . | nindent 4 }}
+    {{- include "confluence-software.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.replicaCount }}
-  serviceName: {{ include "jira-software.fullname" . }}
+  serviceName: {{ include "confluence-software.fullname" . }}
   selector:
     matchLabels:
-      {{- include "jira-software.selectorLabels" . | nindent 6 }}
+      {{- include "confluence-software.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       labels:
-        {{- include "jira-software.selectorLabels" . | nindent 8 }}
+        {{- include "confluence-software.selectorLabels" . | nindent 8 }}
     spec:
     {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
     {{- end }}
-      serviceAccountName: {{ include "jira-software.serviceAccountName" . }}
+      serviceAccountName: {{ include "confluence-software.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
@@ -28,6 +28,11 @@ spec:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
+          spec:
+            securityContext:
+              runAsUser: 2002
+              runAsGroup: 2002
+              fsGroup: 2002
           env:
             - name: ATL_JDBC_URL
               value: "{{ .Values.db.url }}"
@@ -44,19 +49,19 @@ spec:
             - name: ATL_JDBC_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ template "jira-software.secretName" . }}
-                  key: jira-software-password
+                  name: {{ template "confluence-software.secretName" . }}
+                  key: confluence-software-password
             - name: JIRASW_DB
               value: "{{ .Values.db.name }}"
             - name: JVM_SUPPORT_RECOMMENDED_ARGS
               value: "{{ .Values.jvmargs }}"
-            {{- if Values.ingress.enabled }}
+            {{- if .Values.ingress.enabled }}
             - name: ATL_PROXY_NAME
-              value: "{{ .Values.ingress.tomcat-host }}"
+              value: "{{ .Values.ingress.tomcatHost }}"
             - name: ATL_PROXY_PORT
-              value: "{{ .Values.ingress.tomcat-proxy-port }}"
+              value: "{{ .Values.ingress.tomcatProxyPort }}"
             - name: ATL_TOMCAT_SCHEME
-              value: "{{ .Values.ingress.tomcat-scheme }}"
+              value: "{{ .Values.ingress.tomcatScheme }}"
             {{- end }}
           ports:
             - name: http
@@ -64,7 +69,7 @@ spec:
               protocol: TCP
           volumeMounts:
           - name: data
-            mountPath: /var/atlassian/application-data/jira
+            mountPath: /var/atlassian/application-data/confluence
           {{- if .Values.livenessProbe.enabled }}
           livenessProbe:
             httpGet:

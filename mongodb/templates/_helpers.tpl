@@ -61,8 +61,7 @@ Create the name of the service account to use
     {{ default "default" .Values.serviceAccount.name }}
 {{- end -}}
 {{- end -}}
-Return the name of the Secret used to store the passwords
-*/}}
+
 {{- define "mongodb.secretName" -}}
 {{- if .Values.existingSecret -}}
 {{ .Values.existingSecret }}
