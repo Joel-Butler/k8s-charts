@@ -29,7 +29,7 @@ spec:
           image: "{{ .Values.image.repository }}:{{ .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:
-            {{- if not (empty .Values.password) }}
+            {{- if not (empty .Values.db.password) }}
             - name: REDIS_PASSWORD
               valueFrom:
                 secretKeyRef:
