@@ -14,8 +14,12 @@ type: application
 
 # This is the chart version. This version number should be incremented each time you make changes
 # to the chart and its templates, including the app version.
-version: 0.2.2
+version: 0.2.3
 
 # This is the version number of the application being deployed. This version number should be
 # incremented each time you make changes to the application.
-appVersion: 2.4
+
+#updated as per requarks suggstion for latest minor version of current release https://docs.requarks.io/install/docker
+appVersion: 2
+
+
