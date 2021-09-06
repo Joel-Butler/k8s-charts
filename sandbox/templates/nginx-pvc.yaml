@@ -1,0 +1,11 @@
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: webdata
+spec:
+  accessModes:
+    - "ReadWriteMany"
+  resources:
+    requests:
+      storage: {{ .Values.storage.storageSize | quote }}
+  {{if .Values.storage.storageClass}}storageClassName: {{ .Values.storage.storageClass}}{{ end }}
