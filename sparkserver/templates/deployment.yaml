@@ -51,23 +51,18 @@ spec:
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           env:
-          - name: "ASPNETCORE_Kestrel__Certificates__Default__Path"
+            - name: "ASPNETCORE_Kestrel__Certificates__Default__Path"
               value: "/https/certificate"
-          - name: "ASPNETCORE_Kestrel__Certificates__Default__Password"
-            valueFrom:
-              secretKeyRef:
-                name: {{ template "sparkserver.secretName" . }}
-                key: certificate-pass
-          - name: "SPARKSERVER__Environmets__PDE_SparkDatabase__ConnectionString"
-            valueFrom:
-              secretKeyRef:
-                name: {{ template "sparkserver.secretName" . }}
-                key: connection-string
-          - name: "DB_PASS"
-            valueFrom:
-              secretKeyRef:
-                name: {{ template "sparkserver.secretName" . }}
-                key: db-password
+            - name: "ASPNETCORE_Kestrel__Certificates__Default__Password"
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "sparkserver.secretName" . }}
+                  key: certificate-pass
+            - name: "SPARKSERVER__Environmets__PDE_SparkDatabase__ConnectionString"
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "sparkserver.secretName" . }}
+                  key: connection-string
           volumeMounts:
           - mountPath: "/https"
             name: https-key
