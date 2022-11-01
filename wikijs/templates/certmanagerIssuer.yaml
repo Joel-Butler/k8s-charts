@@ -1,7 +1,7 @@
 {{ if .Values.ingress.certManager.email }}
 {{ if eq .Values.ingress.certManager.issuer "letsencrypt-prod" }}
 ---
-apiVersion: cert-manager.io/v1alpha2
+apiVersion: cert-manager.io/v1
 kind: Issuer
 metadata:
   name: letsencrypt-prod
@@ -21,7 +21,7 @@ spec:
           class: nginx
 {{else if eq .Values.ingress.certManager.issuer "letsencrypt-staging" }}
 ---
-apiVersion: cert-manager.io/v1alpha2
+apiVersion: cert-manager.io/v1
 kind: Issuer
 metadata:
   name: letsencrypt-staging

@@ -1,0 +1,92 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "sparkserver.fullname" . }}
+  labels:
+    {{- include "sparkserver.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "sparkserver.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "sparkserver.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "sparkserver.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+            - name: https
+              containerPort: 8081
+              protocol: TCP  
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          env:
+          - name: "ASPNETCORE_Kestrel__Certificates__Default__Path"
+              value: "/https/certificate"
+          - name: "ASPNETCORE_Kestrel__Certificates__Default__Password"
+            valueFrom:
+              secretKeyRef:
+                name: {{ template "sparkserver.secretName" . }}
+                key: certificate-pass
+          - name: "SPARKSERVER__Environmets__PDE_SparkDatabase__ConnectionString"
+            valueFrom:
+              secretKeyRef:
+                name: {{ template "sparkserver.secretName" . }}
+                key: connection-string
+          - name: "DB_PASS"
+            valueFrom:
+              secretKeyRef:
+                name: {{ template "sparkserver.secretName" . }}
+                key: db-password
+          volumeMounts:
+          - mountPath: "/https"
+            name: https-key
+            readOnly: true
+        volumes:
+        - name: https-key
+          secret:
+            secretName: {{ template "sparkserver.secretName" . }}
+            items:
+            - key: certificate
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

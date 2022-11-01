@@ -52,7 +52,7 @@ db:
   user: sqlUser
   name: sqlDB
   storageSize: 20Gi
-  storageClass: nfs-storage-dbdata
+  storageClass: nfs-client
   
 rootUser:
   password: 
