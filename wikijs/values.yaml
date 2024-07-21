@@ -43,9 +43,21 @@ db:
   #user: 
   #password: 
   database: testdb
+  useExternalSecret: true
+  externalSecretData: 
+    providerPayload: 
+      doppler:
+        auth:
+          secretRef:
+            dopplerToken:
+              name: doppler-token-wikijs
+              key: dopplerToken
+    userRef: DB_USER
+    passwordRef: DB_PASS
+
 
 ingress:
-  enabled: true
+  enabled: false
   annotations: 
     nginx.ingress.kubernetes.io/rewrite-target: /
     kubernetes.io/ingress.class: nginx
@@ -61,6 +73,14 @@ ingress:
     - hosts:
       - some.domain 
       secretName: wikitls 
+
+httproute: 
+  enabled: true
+  hostnames:
+    - wiki.jhbutler.info
+  gateway: 
+    name: defaultgateway
+    namespace: gateway
 
 resources: {}
   # We usually recommend not to specify default resources and to leave this as a conscious
