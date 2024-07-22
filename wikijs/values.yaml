@@ -39,7 +39,7 @@ service:
 db:
   type: mysql
   port: "3306"
-  host: mariadb
+  host: mariadb.stateful-data
   #user: 
   #password: 
   useExternalSecret: true
