@@ -42,7 +42,6 @@ db:
   host: mariadb
   #user: 
   #password: 
-  database: testdb
   useExternalSecret: true
   externalSecretData: 
     providerPayload: 
