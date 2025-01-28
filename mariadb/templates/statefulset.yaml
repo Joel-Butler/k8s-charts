@@ -34,17 +34,21 @@ spec:
                 secretKeyRef:
                   name: {{ template "mariadb.secretName" . }}
                   key: mariadb-root-password
-            {{- if not (empty .Values.db.user) }}
             - name: MYSQL_USER
-              value: "{{ .Values.db.user }}"
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "mariadb.secretName" . }}
+                  key: mariadb-db-user
             - name: MYSQL_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ template "mariadb.secretName" . }}
-                  key: mariadb-password
-            {{- end }}
+                  key: mariadb-db-password
             - name: MYSQL_DATABASE
-              value: "{{ .Values.db.name }}"
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "mariadb.secretName" . }}
+                  key: mariadb-db
           ports:
             - name: mysql
               containerPort: 3306

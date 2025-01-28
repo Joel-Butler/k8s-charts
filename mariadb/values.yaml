@@ -52,7 +52,7 @@ db:
   user: sqlUser
   name: sqlDB
   storageSize: 20Gi
-  storageClass: nfs-client
+  storageClass: nfs-storage-dbdata
   
 rootUser:
   password: 
@@ -87,3 +87,5 @@ nodeSelector: {}
 tolerations: []
 
 affinity: {}
+
+existingSecret: mariadb-secrets
