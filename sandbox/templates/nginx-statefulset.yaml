@@ -36,7 +36,7 @@ spec:
           volumeMounts:
           - mountPath: /usr/share/nginx/html
             name: webcontent
-            readOnly: true
+            readOnly: false
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - name: http
@@ -52,11 +52,19 @@ spec:
               port: http
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
+      initContainers:
+        - name: populate-volume
+          image: "{{ .Values.nginx.image }}:{{ .Values.nginx.tag}}"
+          volumeMounts:
+          - mountPath: /usr/share/nginx/html
+            name: webcontent
+            readOnly: false
+          command: ['sh', '-c', "echo '<html><head><title>indext</title></head><body><h1>Index</h1></body></html>' > /usr/share/nginx/html/index.html"]
       volumes:
       - name: webcontent
         persistentVolumeClaim:
           claimName: webdata
-          readOnly: true
+          readOnly: false
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
