@@ -31,6 +31,10 @@ Create chart name and version as used by the chart label.
 {{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
+{{- define "mariadb.imageTag" -}}
+{{- default .Chart.AppVersion .Values.image.tag -}}
+{{- end -}}
+
 {{/*
 Common labels
 */}}

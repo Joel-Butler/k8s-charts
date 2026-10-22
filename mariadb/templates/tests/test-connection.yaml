@@ -1,28 +1,56 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: "{{ .Release.Name }}-credentials-test"
+  name: "{{ .Release.Name }}-connection-test"
+  labels:
+    {{- include "mariadb.labels" . | nindent 4 }}
   annotations:
     "helm.sh/hook": test
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
 spec:
+  backoffLimit: 0
   template:
+    metadata:
+      labels:
+        {{- include "mariadb.selectorLabels" . | nindent 8 }}
     spec:
-      containers:
-      - name: main
-        image: {{ .Values.image }}
-        env:
-        - name: MARIADB_HOST
-          value: {{ template "mariadb.fullname" . }}
-        - name: MARIADB_PORT
-          value: "3306"
-        - name: WORDPRESS_DATABASE_NAME
-          value: {{ default "" .Values.db.name | quote }}
-        - name: WORDPRESS_DATABASE_USER
-          value: {{ default "" .Values.db.user | quote }}
-        - name: WORDPRESS_DATABASE_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: {{ template "mariadb.fullname" . }}
-              key: mariadb-password
-        command: ["sh", "-c", "mysql --host=$MARIADB_HOST --port=$MARIADB_PORT --user=$WORDPRESS_DATABASE_USER --password=$WORDPRESS_DATABASE_PASSWORD"]
       restartPolicy: Never
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: connection-test
+          image: "{{ .Values.image.repository }}:{{ include "mariadb.imageTag" . }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            - name: MARIADB_HOST
+              value: {{ include "mariadb.fullname" . | quote }}
+            - name: MARIADB_PORT
+              value: {{ .Values.service.port | quote }}
+            - name: MARIADB_DATABASE
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "mariadb.secretName" . }}
+                  key: mariadb-db
+            - name: MARIADB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "mariadb.secretName" . }}
+                  key: mariadb-db-user
+            - name: MARIADB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "mariadb.secretName" . }}
+                  key: mariadb-db-password
+          command:
+            - sh
+            - -ec
+            - >-
+              mariadb --protocol=tcp
+              --host="$MARIADB_HOST"
+              --port="$MARIADB_PORT"
+              --user="$MARIADB_USER"
+              --password="$MARIADB_PASSWORD"
+              --database="$MARIADB_DATABASE"
+              --execute='SELECT VERSION(); SELECT 1;'

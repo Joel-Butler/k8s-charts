@@ -6,6 +6,8 @@ metadata:
     {{- include "mariadb.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.replicaCount }}
+  updateStrategy:
+    type: RollingUpdate
   serviceName: {{ include "mariadb.fullname" . }}
   selector:
     matchLabels:
@@ -26,9 +28,11 @@ spec:
         - name: {{ .Chart.Name }}
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
-          image: "{{ .Values.image.repository }}:{{ .Chart.AppVersion }}"
+          image: "{{ .Values.image.repository }}:{{ include "mariadb.imageTag" . }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:
+            - name: MARIADB_AUTO_UPGRADE
+              value: {{ .Values.upgrade.autoUpgrade | ternary "1" "0" | quote }}
             - name: MYSQL_ROOT_PASSWORD
               valueFrom:
                 secretKeyRef:
@@ -56,17 +60,23 @@ spec:
           volumeMounts:
           - name: data
             mountPath: /var/lib/mysql
+          {{ if .Values.startupProbe.enabled }}
+          startupProbe:
+            exec:
+              command:
+                - sh
+                - -c
+                - mariadb-admin status -uroot -p"$MYSQL_ROOT_PASSWORD"
+            periodSeconds: {{ .Values.startupProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.startupProbe.timeoutSeconds }}
+            failureThreshold: {{ .Values.startupProbe.failureThreshold }}
+          {{ end }}
           livenessProbe:
             exec:
               command:
                 - sh
                 - -c
-                - |
-                  password_aux="${MYSQL_ROOT_PASSWORD:-}"
-                  if [ -f "${MARIADB_ROOT_PASSWORD_FILE:-}" ]; then
-                      password_aux=$(cat $MARIADB_ROOT_PASSWORD_FILE)
-                  fi
-                  mysqladmin status -uroot -p$password_aux
+                - mariadb-admin status -uroot -p"$MYSQL_ROOT_PASSWORD"
             initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
@@ -77,12 +87,7 @@ spec:
               command:
                 - sh
                 - -c
-                - |
-                  password_aux="${MYSQL_ROOT_PASSWORD:-}"
-                  if [ -f "${MARIADB_ROOT_PASSWORD_FILE:-}" ]; then
-                      password_aux=$(cat $MARIADB_ROOT_PASSWORD_FILE)
-                  fi
-                  mysqladmin status -uroot -p$password_aux
+                - mariadb-admin status -uroot -p"$MYSQL_ROOT_PASSWORD"
             initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}

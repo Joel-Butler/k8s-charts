@@ -6,6 +6,8 @@ replicaCount: 1
 
 image:
   repository: mariadb
+  # Leave empty to use Chart.yaml appVersion. Set this for each upgrade step.
+  tag: ""
   pullPolicy: IfNotPresent
 
 imagePullSecrets: []
@@ -81,6 +83,16 @@ readinessProbe:
   timeoutSeconds: 1
   successThreshold: 1
   failureThreshold: 3
+startupProbe:
+  enabled: true
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 60
+
+# The official MariaDB image runs mariadb-upgrade before starting the server
+# when this is enabled and it detects a major version change.
+upgrade:
+  autoUpgrade: true
 
 nodeSelector: {}
 
